@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <video  id="bg-video" src="./video/211718.mp4"></video>
+    <div class="container">
+        <div class="bomba">
+            <div>
+                <input type="number" value="10" class="counter">
+                <button id="explodir">Ok</button>
+            </div>
+        </div>
+    </div>
+<script>
+    const btao = document.querySelector("#explodir")
+    let segundos = 0;
+
+    btao.addEventListener("click",()=>{
+       const dice = Math.floor(Math.random()*10 + 1);
+  
+       let acabou = false;
+       let intervalo = 9;
+       console.log(dice)
+       const counter = document.querySelector(".counter");
+       //audio
+       const explosao = new Audio("./sound/kabooom.mp3");
+       const beep = new Audio("./sound/beep.mp3");
+       const danger = new Audio("./sound/danger.mp3");
+       //video
+       const videoKaboom = document.querySelector("#bg-video");
+
+       counter.disabled = true;
+       segundos = counter.value;
+       btao.disabled = true;
+      const timer = setInterval(()=>{
+          segundos--;
+          counter.value = segundos;
+           if(segundos>4){
+               beep.currentTime = 0;
+               beep.play();
+           }
+           if(segundos<=4){
+            danger.currentTime= 0;
+            danger.play();
+            counter.style.color="red";
+           }
+           if(segundos==0){
+            if(dice!=1){
+            explosao.currentTime=0;
+            videoKaboom.style.visibility="visible";
+            videoKaboom.play()
+            explosao.play();
+            acabou = true;
+            segundos = 0;
+            clearInterval(timer);
+            }else{
+                videoKaboom.style.visibility="visible";
+                videoKaboom.src="./video/rick.mp4";
+                videoKaboom.play();
+                intervalo = 11;
+                acabou = true;
+                segundos = 0;
+                 clearInterval(timer);
+            }
+          
+           }
+       },1000)
+      
+        const timer2 = setInterval(()=>{
+        if(acabou){
+            console.log(segundos);
+            segundos++;
+            if(segundos == intervalo){
+        videoKaboom.style.visibility = "hidden";
+       counter.disabled = false;
+       counter.value = 10;
+       counter.style.color="green";
+       btao.disabled=false;
+       clearInterval(timer2);
+       }
+     
+        }
+       },1000)
+
+    })
+
+
+</script>
+</body>
+</html>
